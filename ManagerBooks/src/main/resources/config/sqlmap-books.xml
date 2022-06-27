@@ -35,10 +35,6 @@
 			</choose>
 	</select>
 
-<!-- 	<select id="listCountByTitle" resultType="int">
-		SELECT COUNT(*) FROM books WHERE title LIKE '%'||#{title}||'%'
-	</select>
-	 -->
 	<insert id="insert" parameterType="book">
 		INSERT INTO books (no,isbn,title,writer,publisher,price,imgoriginal,imgsaved,intro)
 		VALUES (seq_books.NEXTVAL,#{isbn},#{title},#{writer},#{publisher},#{price},#{imgoriginal},#{imgsaved},#{intro})
@@ -51,36 +47,22 @@
            			 row_number() over(order by no desc) as rNum
        				 FROM (SELECT * FROM books WHERE
        				 		<choose>
-       				 			<when test="category=='title'">INSTR(title,#{keyword})>0))mp</when>
-       				 			<when test="category=='writer'">INSTR(writer,#{keyword})>0))mp</when>
-       				 			<when test="category=='publisher'">INSTR(publisher,#{keyword})>0))mp</when>
+       				 			<when test="category=='title'">INSTR(title,#{keyword})>0</when>
+       				 			<when test="category=='writer'">INSTR(writer,#{keyword})>0</when>
+       				 			<when test="category=='publisher'">INSTR(publisher,#{keyword})>0</when>
        				 		</choose>
+       				 		)) mp
 		WHERE rNum BETWEEN #{rowStart} AND #{rowEnd}
 		ORDER BY no DESC
 	</select>
-	
-<!-- 		<select id="searchByTitle" resultType="book"  parameterType="searchCriteria" >
-		SELECT * FROM 
-			(SELECT no, isbn, title, writer, publisher, price, imgoriginal, intro,
-           			 row_number() over(order by no desc) as rNum
-       				 FROM (SELECT * FROM books WHERE INSTR(title,#{keyword}) > 0)
-                    							)mp
-		WHERE rNum BETWEEN #{rowStart} AND #{rowEnd}
-		ORDER BY no DESC
-	</select> -->
-<!-- 	
-	<select id="searchByWriter" resultType="book">
-		SELECT * FROM books WHERE INSTR(writer,#{writer})>0
-	</select>
-	
-	<select id="searchByPublisher" resultType="book">
-		SELECT * FROM books WHERE INSTR(publisher,#{publisher})>0
-	</select>
- -->
-	
+		
 	<!-- addController에서 중복객체 확인하기 위한 쿼리 -->
 	<select id="selectByTitle" resultType="book">
 		SELECT * FROM books WHERE title=#{title}
+	</select>
+	
+	<select id="selectByIsbn" resultType="book">
+		SELECT * from books WHERE isbn=#{isbn}
 	</select>
 	
 	<select id="selectByNo" resultType="book">

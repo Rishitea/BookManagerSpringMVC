@@ -26,11 +26,9 @@ public class AddRequestValidator implements Validator{
 		if(addReq.getPrice()==0) {
 			errors.rejectValue("price", "priceRequired");
 		}
-//		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "price", "required");//
-		
-		//
-		if(addReq.getImgoriginal()==null || addReq.getImgoriginal().isEmpty()) {
-			errors.rejectValue("imgoriginal", "imgRequired");
-		}
+
+//		if(addReq.getImgoriginal()==null || addReq.getImgoriginal().isEmpty()) {
+//			errors.rejectValue("imgoriginal", "imgRequired");
+//		}
 	}
 }

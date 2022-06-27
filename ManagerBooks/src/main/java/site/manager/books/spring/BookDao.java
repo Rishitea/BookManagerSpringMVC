@@ -10,6 +10,7 @@ import site.manager.books.commons.paging.SearchCriteria;
 public interface BookDao {
 	
 	public Object selectByTitle(String title); //Read 디테일
+	public Object selectByIsbn(String isbn); //중복 확인용
 //	public Object selectByWriter(String writer);
 //	public Object selectByPublisher(String publisher);
 		

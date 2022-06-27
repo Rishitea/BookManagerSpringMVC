@@ -46,26 +46,6 @@ public class BookDaoImpl implements BookDao{
 		return results.isEmpty()? null : results.get(0);
 	}
 
-//	@Override
-//	public List<Book> searchByTitle(SearchCriteria cri) {
-//		return sqlSessionTemplate.selectList("listPage", cri);
-//	}
-//	
-//	@Override
-//	public List<Book> searchByTitle(String title) {
-//		return sqlSessionTemplate.selectList("searchByTitle", title);
-//	}
-//
-//	@Override
-//	public List<Book> searchByWriter(String writer) {
-//		return sqlSessionTemplate.selectList("searchByWriter", writer);
-//	}
-//
-//	@Override
-//	public List<Book> searchByPublisher(String publisher) {
-//		return sqlSessionTemplate.selectList("searchByPublisher", publisher);
-//	}
-
 	@Override
 	public List<Book> list(SearchCriteria cri) throws Exception {
 		return sqlSessionTemplate.selectList("book.dtd.listPage", cri);
@@ -78,12 +58,18 @@ public class BookDaoImpl implements BookDao{
 
 	@Override
 	public List<Book> searchByCategory(SearchCriteria cri) {
+		System.out.println(cri);
 		return sqlSessionTemplate.selectList("book.dtd.searchByCategory", cri);
 	}
 
 	@Override
 	public int listCountByCategory(SearchCriteria cri) throws Exception {
 		return sqlSessionTemplate.selectOne("book.dtd.listCountByCategory", cri);
+	}
+
+	@Override
+	public Object selectByIsbn(String isbn) {
+		return sqlSessionTemplate.selectOne("book.dtd.selectByIsbn", isbn);
 	}
 
 }
