@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="book.dtd">
+
+	<select id="list" resultType="book">
+		SELECT * FROM books ORDER BY NO
+	</select>
+	
+	<select id="listPage" resultType="book" parameterType="searchCriteria">
+		select no, isbn, title, writer, publisher, price, imgoriginal, imgsaved, intro
+		from (
+        		select no, isbn, title, writer, publisher, price, imgoriginal, imgsaved, intro,
+           		row_number() over(order by no desc) as rNum
+       			from books)mp
+		where rNum between #{rowStart} and #{rowEnd}
+		order by no desc
+	</select>
+	
+	<select id="listCount" resultType="int">
+		<![CDATA[
+			SELECT COUNT(no)
+				FROM books
+			WHERE no>0
+		]]>
+	</select>
+	
+	<select id="listCountByCategory" resultType="int">
+		SELECT COUNT(*) FROM books WHERE 
+			<choose>
+				<when test="category=='title'">title LIKE '%'||#{keyword}||'%'</when>
+				<when test="category=='writer'">writer LIKE '%'||#{keyword}||'%'</when>
+				<when test="category=='publisher'">publisher LIKE '%'||#{keyword}||'%'</when>
+			</choose>
+	</select>
+
+<!-- 	<select id="listCountByTitle" resultType="int">
+		SELECT COUNT(*) FROM books WHERE title LIKE '%'||#{title}||'%'
+	</select>
+	 -->
+	<insert id="insert" parameterType="book">
+		INSERT INTO books (no,isbn,title,writer,publisher,price,imgoriginal,imgsaved,intro)
+		VALUES (seq_books.NEXTVAL,#{isbn},#{title},#{writer},#{publisher},#{price},#{imgoriginal},#{imgsaved},#{intro})
+	</insert>
+	
+	<!-- category 구분 포함한 쿼리-->
+	<select id="searchByCategory" resultType="book"  parameterType="searchCriteria" >
+		SELECT * FROM 
+			(SELECT no, isbn, title, writer, publisher, price, imgoriginal, imgsaved, intro,
+           			 row_number() over(order by no desc) as rNum
+       				 FROM (SELECT * FROM books WHERE
+       				 		<choose>
+       				 			<when test="category=='title'">INSTR(title,#{keyword})>0))mp</when>
+       				 			<when test="category=='writer'">INSTR(writer,#{keyword})>0))mp</when>
+       				 			<when test="category=='publisher'">INSTR(publisher,#{keyword})>0))mp</when>
+       				 		</choose>
+		WHERE rNum BETWEEN #{rowStart} AND #{rowEnd}
+		ORDER BY no DESC
+	</select>
+	
+<!-- 		<select id="searchByTitle" resultType="book"  parameterType="searchCriteria" >
+		SELECT * FROM 
+			(SELECT no, isbn, title, writer, publisher, price, imgoriginal, intro,
+           			 row_number() over(order by no desc) as rNum
+       				 FROM (SELECT * FROM books WHERE INSTR(title,#{keyword}) > 0)
+                    							)mp
+		WHERE rNum BETWEEN #{rowStart} AND #{rowEnd}
+		ORDER BY no DESC
+	</select> -->
+<!-- 	
+	<select id="searchByWriter" resultType="book">
+		SELECT * FROM books WHERE INSTR(writer,#{writer})>0
+	</select>
+	
+	<select id="searchByPublisher" resultType="book">
+		SELECT * FROM books WHERE INSTR(publisher,#{publisher})>0
+	</select>
+ -->
+	
+	<!-- addController에서 중복객체 확인하기 위한 쿼리 -->
+	<select id="selectByTitle" resultType="book">
+		SELECT * FROM books WHERE title=#{title}
+	</select>
+	
+	<select id="selectByNo" resultType="book">
+		SELECT * FROM books WHERE no=#{no}
+	</select>
+</mapper>
