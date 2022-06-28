@@ -1,43 +1,23 @@
 package site.manager.books.spring;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 import org.springframework.stereotype.Component;
 
 //커맨드객체 (사용자 요청 정보를 담는 클래스)
-@Component
-public class AddRequest {
+//@Component
+public class AddRequest2 {
 	private Long no;
-	
-	@NotNull
-	@Max(value=1000000)
 	private String isbn;
-	
-	@NotEmpty(message="[필수 항목]")
 	private String title;
-	
-	@NotEmpty(message="[필수 항목]")
 	private String writer;
-	
-	@NotEmpty(message="[필수 항목]")
 	private String publisher;
-	
-	@NotNull
 	private int price;
-	
-	//@NotEmpty(message="[필수 항목]")
 	private String imgoriginal;
-	
 	private String imgsaved;
-	
-	@NotEmpty(message="[필수 항목]")
 	private String intro;
 	
-	public AddRequest() {}
+	public AddRequest2() {}
 	
-	public AddRequest(Long no, @NotNull @Max(100000) String isbn, String title, String writer, String publisher, @NotNull int price,
+	public AddRequest2(Long no, String isbn, String title, String writer, String publisher, int price,
 			String imgoriginal, String imgsaved, String intro) {
 		super();
 		this.no = no;

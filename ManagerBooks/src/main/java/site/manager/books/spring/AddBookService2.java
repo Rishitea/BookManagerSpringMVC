@@ -6,24 +6,24 @@ import org.springframework.stereotype.Service;
 import site.manager.books.exception.AlreadyExistingBookException;
 import site.manager.books.exception.AlreadyExistingIsbnException;
 
-@Service
-public class AddBookService {
+//@Service
+public class AddBookService2 {
 	private BookDao bookDao;
 	
-	public AddBookService() {}
+	public AddBookService2() {}
 	@Autowired
-	public AddBookService(BookDao bookDao) {
+	public AddBookService2(BookDao bookDao) {
 		this.bookDao = bookDao;
 	}	
 	
 	public void add(AddRequest addReq) {
 		Book book = (Book)bookDao.selectByTitle(addReq.getTitle());
 		if (book != null) {
-			throw new AlreadyExistingBookException(addReq.getTitle()+"는 이미 존재하는 도서명입니다.");
+			throw new AlreadyExistingBookException(addReq.getTitle()+"는 이미 존재하는 도서입니다.");
 		}
 		Book book2 = (Book)bookDao.selectByIsbn(addReq.getIsbn());
 		if (book2 != null) {
-			throw new AlreadyExistingIsbnException(addReq.getIsbn()+"는 이미 존재하는 ISBN입니다.");
+			throw new AlreadyExistingIsbnException(addReq.getIsbn()+"는 이미 존재하는 도서입니다.");
 		}
 		
 		Book newBook = 
